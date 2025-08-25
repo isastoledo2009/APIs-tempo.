@@ -1,34 +1,18 @@
-//Consumir API Dólar
+async function getWeather() {
+    //Criar uma variavel para pegar o valor do input
+    var cidade = document.getElementById('city').value
 
-fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then(resposta => {
-    return resposta.json()
-}).then(economia => {
-console.log(economia)
-document.getElementById('valorDolar').innerHTML ="R$ " + economia.USDBRL.bid
-})
+    //Conectar com  API
+    var resposta = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=64ed82577ced7f69cb1687f0ce536131`)
 
-async function buscarCotacao() {
-    const url = 'https://economia.awesomeapi.com.br/json/last/USD-BRL';
+    //Variavel para consumir o JSON
+    var tempCelsius = resposta.data.main.temp
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+    document.getElementById('temperatura').innerHTML = `A temperatura atual da cidade de ${cidade} é de: ${tempCelsius.toFixed(0)} °C`
 
-        // O objeto tem a chave "USDBRL"
-        const dolar = data.USDBRL;
+   
 
-        // Valores máximo e mínimo do dia
-        const maximo = dolar.high;
-        const minimo = dolar.low;
 
-        document.getElementById('maximo').textContent = `R$ ${parseFloat(maximo).toFixed(2)}`;
-        document.getElementById('minimo').textContent = `R$ ${parseFloat(minimo).toFixed(2)}`;
-
-    } catch (error) {
-        console.error('Erro ao buscar cotação:', error);
-        document.getElementById('maximo').textContent = 'Erro ao carregar';
-        document.getElementById('minimo').textContent = 'Erro ao carregar';
-    }
 }
-
-buscarCotacao();
+ //Chamar a função
+ getWeather()
